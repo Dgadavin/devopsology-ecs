@@ -14,11 +14,11 @@ variable "main_cluster_stack_name" {
 }
 
 variable "ScaleMinCapacity" {
-  default = "1"
+  default = "2"
 }
 
 variable "ScaleMaxCapacity" {
-  default = "1"
+  default = "5"
 }
 
 variable "HostedZone" {

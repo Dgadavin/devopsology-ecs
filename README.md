@@ -1,6 +1,6 @@
 # Terraform
 
-Download [terraform](https://releases.hashicorp.com/terraform/0.11.14/)
+Download terraform
 
 ```bash
 unzip terraform.zip

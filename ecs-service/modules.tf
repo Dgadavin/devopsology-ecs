@@ -1,7 +1,7 @@
 data "terraform_remote_state" "base-stack" {
   backend = "s3"
   config = {
-    bucket = "devopsology-tf-max"
+    bucket = "@@bucket@@"
     key    = "baseSetup/terraform.tfstate"
     region = "us-east-1"
   }
@@ -10,7 +10,7 @@ data "terraform_remote_state" "base-stack" {
 data "terraform_remote_state" "main-cluster" {
   backend = "s3"
   config = {
-    bucket = "devopsology-tf-max"
+    bucket = "@@bucket@@"
     key    = "${var.main_cluster_stack_name}/terraform.tfstate"
     region = "us-east-1"
   }
