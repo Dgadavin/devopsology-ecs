@@ -6,7 +6,7 @@ variable "app_autoscaling_enabled" {
 }
 
 variable "lb_enabled" {
-  default = 1
+  default = true
 }
 
 variable "container_name" {

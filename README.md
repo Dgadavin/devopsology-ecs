@@ -39,12 +39,12 @@ aws configure
 ### Create S3 bucket for storing states
 
 ```bash
-aws s3api create-bucket --bucket terraform-itea-workshop-<YOUR_NAME> --region us-east-1
+aws s3api create-bucket --bucket devopsology-tf-<YOUR_NAME> --region us-east-1
 ```
 
 ### Config remote state
 ```bash
-BUCKET_NAME="terraform-itea-workshop-<YOUR_NAME>"
+BUCKET_NAME="devopsology-tf-<YOUR_NAME>"
 grep -Rl '@@bucket@@' . | xargs sed -i.bac -e 's/@@bucket@@/${BUCKET_NAME}/g' # For MAC
 grep -Rl '@@bucket@@' . | xargs sed -i's/@@bucket@@/${BUCKET_NAME}/g' # On Linux
 ```
@@ -53,12 +53,11 @@ grep -Rl '@@bucket@@' . | xargs sed -i's/@@bucket@@/${BUCKET_NAME}/g' # On Linux
 
 ```bash
 cd base_aws_setup
-export TF_VAR_env=prod
 grep -Rl '@@bucket@@' . | xargs sed -i.bac -e 's/@@bucket@@/${BUCKET_NAME}/g' # For MAC
 grep -Rl '@@bucket@@' . | xargs sed -i's/@@bucket@@/${BUCKET_NAME}/g' # On Linux
 terraform init -backend-config=config/${TF_VAR_env}-state.conf
-terraform plan -var-file=environment/${TF_VAR_env}.tfvars
-terraform apply -var-file=environment/${TF_VAR_env}.tfvars
+terraform plan
+terraform apply
 ```
 
 ## ECS cluster creation
@@ -80,6 +79,7 @@ cd ecs-service
 export TF_VAR_env=dev
 grep -Rl '@@bucket@@' . | xargs sed -i.bac -e 's/@@bucket@@/${BUCKET_NAME}/g' # For MAC
 grep -Rl '@@bucket@@' . | xargs sed -i's/@@bucket@@/${BUCKET_NAME}/g' # On Linux
+aws ssm put-parameter --name "test.db.password" --type "SecureString" --overwrite --value "SecretPass" --region us-east-1
 terraform init -backend-config=config/${TF_VAR_env}-state.conf
 terraform plan -var-file=environment/${TF_VAR_env}.tfvars
 terraform apply -var-file=environment/${TF_VAR_env}.tfvars

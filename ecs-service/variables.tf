@@ -1,6 +1,6 @@
 #Immutable variables
 variable "service_name" {
-  default = "itea-nginx"
+  default = "devops-nginx"
 }
 
 variable "Environment" {

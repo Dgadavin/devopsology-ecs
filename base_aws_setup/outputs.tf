@@ -35,13 +35,6 @@ output "RouteTableIDMap" {
   }
 }
 
-output "DevVPNSgMap" {
-  value = {
-    "dev"   = aws_security_group.openvpn_dev.id
-    "stage" = aws_security_group.openvpn_stage.id
-  }
-}
-
 output "EcsExecutionRoleARN" {
   value = module.ecs-execution-role.IAMRoleARN
 }
