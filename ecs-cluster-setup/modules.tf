@@ -54,13 +54,14 @@ module "alb-external" {
 }
 
 module "ecs-instances" {
-  source                   = "../terraform-modules//autoscaling-group"
-  environment              = var.environment
-  name                     = var.ClusterName
-  aws_ami                  = var.AmiId
-  spot_price               = "0.017"
+  source      = "../terraform-modules//autoscaling-group"
+  environment = var.environment
+  name        = var.ClusterName
+  aws_ami     = var.AmiId
+  # spot_price               = "0.017" # uncomment if you want to use spot instances
+  instance_type            = "t2.micro"
   ssh_key_name             = var.ssh_key_name
-  security_groups          = [aws_security_group.cluster-sg.id, data.terraform_remote_state.base-stack.outputs.DevVPNSgMap[var.environment]]
+  security_groups          = [aws_security_group.cluster-sg.id]
   iam_instance_profile_arn = module.instance-role.InstanceProfileARN
   subnet_ids = split(
     ",",
@@ -71,4 +72,3 @@ module "ecs-instances" {
   notify_role_arn = module.asg-lifeccycle-hook-role.IAMRoleARN
   user_data       = data.template_file.user_data.rendered
 }
-
