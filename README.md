@@ -60,6 +60,11 @@ terraform plan
 terraform apply
 ```
 
+## Import you ssh public key to AWS
+
+```bash
+aws ec2 import-key-pair --key-name devopsology-key --public-key-material "<public-key-content>"
+```
 ## ECS cluster creation
 
 ```bash
