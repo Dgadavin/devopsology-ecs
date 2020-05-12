@@ -53,6 +53,7 @@ grep -Rl '@@bucket@@' . | xargs sed -i "s/@@bucket@@/${BUCKET_NAME}/g" # On Linu
 
 ```bash
 cd base_aws_setup
+export TF_VAR_env=prod
 grep -Rl '@@bucket@@' . | xargs sed -i.bac -e 's/@@bucket@@/${BUCKET_NAME}/g' # For MAC
 grep -Rl '@@bucket@@' . | xargs sed -i "s/@@bucket@@/${BUCKET_NAME}/g" # On Linux
 terraform init -backend-config=config/${TF_VAR_env}-state.conf
