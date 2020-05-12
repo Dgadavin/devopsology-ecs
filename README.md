@@ -46,7 +46,7 @@ aws s3api create-bucket --bucket devopsology-tf-<YOUR_NAME> --region us-east-1
 ```bash
 BUCKET_NAME="devopsology-tf-<YOUR_NAME>"
 grep -Rl '@@bucket@@' . | xargs sed -i.bac -e 's/@@bucket@@/${BUCKET_NAME}/g' # For MAC
-grep -Rl '@@bucket@@' . | xargs sed -i's/@@bucket@@/${BUCKET_NAME}/g' # On Linux
+grep -Rl '@@bucket@@' . | xargs sed -i "s/@@bucket@@/${BUCKET_NAME}/g" # On Linux
 ```
 
 ## Base AWS setup with VPCs
@@ -54,7 +54,7 @@ grep -Rl '@@bucket@@' . | xargs sed -i's/@@bucket@@/${BUCKET_NAME}/g' # On Linux
 ```bash
 cd base_aws_setup
 grep -Rl '@@bucket@@' . | xargs sed -i.bac -e 's/@@bucket@@/${BUCKET_NAME}/g' # For MAC
-grep -Rl '@@bucket@@' . | xargs sed -i's/@@bucket@@/${BUCKET_NAME}/g' # On Linux
+grep -Rl '@@bucket@@' . | xargs sed -i "s/@@bucket@@/${BUCKET_NAME}/g" # On Linux
 terraform init -backend-config=config/${TF_VAR_env}-state.conf
 terraform plan
 terraform apply
@@ -71,7 +71,7 @@ aws ec2 import-key-pair --key-name devopsology-key --public-key-material "<publi
 cd ecs-cluster-setup
 export TF_VAR_env=dev
 grep -Rl '@@bucket@@' . | xargs sed -i.bac -e 's/@@bucket@@/${BUCKET_NAME}/g' # For MAC
-grep -Rl '@@bucket@@' . | xargs sed -i's/@@bucket@@/${BUCKET_NAME}/g' # On Linux
+grep -Rl '@@bucket@@' . | xargs sed -i "s/@@bucket@@/${BUCKET_NAME}/g" # On Linux
 terraform init -backend-config=config/${TF_VAR_env}-state.conf
 terraform plan -var-file=environment/${TF_VAR_env}.tfvars
 terraform apply -var-file=environment/${TF_VAR_env}.tfvars
@@ -83,7 +83,7 @@ terraform apply -var-file=environment/${TF_VAR_env}.tfvars
 cd ecs-service
 export TF_VAR_env=dev
 grep -Rl '@@bucket@@' . | xargs sed -i.bac -e 's/@@bucket@@/${BUCKET_NAME}/g' # For MAC
-grep -Rl '@@bucket@@' . | xargs sed -i's/@@bucket@@/${BUCKET_NAME}/g' # On Linux
+grep -Rl '@@bucket@@' . | xargs sed -i "s/@@bucket@@/${BUCKET_NAME}/g" # On Linux
 aws ssm put-parameter --name "test.db.password" --type "SecureString" --overwrite --value "SecretPass" --region us-east-1
 terraform init -backend-config=config/${TF_VAR_env}-state.conf
 terraform plan -var-file=environment/${TF_VAR_env}.tfvars
