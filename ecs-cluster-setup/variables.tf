@@ -15,9 +15,8 @@ variable "CertificateARN" {
 }
 
 variable "AmiId" {
-  default = "ami-0b84afb18c43907ba"
+  default = "ami-040d7258a1baecb27"
 }
 
 variable "ssh_key_name" {
 }
-
