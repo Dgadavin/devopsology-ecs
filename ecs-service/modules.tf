@@ -61,7 +61,7 @@ module "ecs-service" {
   scale_max_capacity                 = var.ScaleMaxCapacity
   scale_min_capacity                 = var.ScaleMinCapacity
   autoscaling_iam_role_arn           = data.terraform_remote_state.main-cluster.outputs.AutoscalingEcsRole
-  route53_fqdn                       = module.route53-fluent.FancyLoadBalancerDNSName
+  route53_fqdn                       = module.route53-internal.FancyLoadBalancerDNSName
   health_path                        = "/"
   app_autoscaling_enabled            = false
   deployment_minimum_healthy_percent = 100
@@ -87,4 +87,3 @@ module "ecs-service" {
 #   app_autoscaling_enabled  = false
 #   container_port           = 80
 # }
-
