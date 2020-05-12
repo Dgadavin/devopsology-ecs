@@ -24,6 +24,14 @@ module "task-definition" {
   execution_role_arn = data.terraform_remote_state.base-stack.outputs.EcsExecutionRoleARN
 }
 
+# module "task-definition-fluent" {
+#   source             = "git@github.com:dgadavin/devopsology-ecs//terraform-modules/task-definition"
+#   family             = "${var.service_name}-fluent-terraform"
+#   task_template      = data.template_file.nginxTemplateLogs.rendered
+#   task_role_arn      = module.iam-role.IAMRoleARN
+#   execution_role_arn = data.terraform_remote_state.base-stack.outputs.EcsExecutionRoleARN
+# }
+
 module "route53-internal" {
   source                   = "git@github.com:dgadavin/devopsology-ecs//terraform-modules/route53"
   elb_dns_name             = "${var.ELBDNSName}-us-east-1"
@@ -31,6 +39,14 @@ module "route53-internal" {
   load_balancer_dns_name   = data.terraform_remote_state.main-cluster.outputs.ClusterInternetFacingLoadBalancerDNSName
   canonical_hosted_zone_id = "Z35SXDOTRQ7X7K"
 }
+
+# module "route53-fluent" {
+#   source                   = "git@github.com:dgadavin/devopsology-ecs//terraform-modules/route53"
+#   elb_dns_name             = "${var.ELBDNSName}-logs-us-east-1"
+#   domain_hosted_zone_id    = var.HostedZoneID
+#   load_balancer_dns_name   = data.terraform_remote_state.main-cluster.outputs.ClusterInternetFacingLoadBalancerDNSName
+#   canonical_hosted_zone_id = "Z35SXDOTRQ7X7K"
+# }
 
 module "ecs-service" {
   source                             = "git@github.com:dgadavin/devopsology-ecs//terraform-modules/ecs-deploy"
@@ -45,11 +61,30 @@ module "ecs-service" {
   scale_max_capacity                 = var.ScaleMaxCapacity
   scale_min_capacity                 = var.ScaleMinCapacity
   autoscaling_iam_role_arn           = data.terraform_remote_state.main-cluster.outputs.AutoscalingEcsRole
-  route53_fqdn                       = module.route53-internal.FancyLoadBalancerDNSName
+  route53_fqdn                       = module.route53-fluent.FancyLoadBalancerDNSName
   health_path                        = "/"
   app_autoscaling_enabled            = false
   deployment_minimum_healthy_percent = 100
   deployment_maximum_percent         = 200
   container_port                     = 80
 }
+
+# module "ecs-service_fluent" {
+#   source                   = "git@github.com:dgadavin/devopsology-ecs//terraform-modules/ecs-deploy"
+#   service_name             = "${var.service_name}-fluent-${lower(var.Environment)}"
+#   container_name           = var.service_name
+#   vpc_id                   = data.terraform_remote_state.base-stack.outputs.VPCIdsMap[var.Environment]
+#   http_listener_arn        = data.terraform_remote_state.main-cluster.outputs.ClusterInternetFacingLoadBalancerHttpListener
+#   cluster_id               = data.terraform_remote_state.main-cluster.outputs.ClusterName
+#   task_definition_arn      = module.task-definition-fluent.TaskDefinitionARN
+#   desire_count             = var.ScaleMinCapacity
+#   service_iam_role         = data.terraform_remote_state.main-cluster.outputs.ClusterecsServiceRole
+#   scale_max_capacity       = var.ScaleMaxCapacity
+#   scale_min_capacity       = var.ScaleMinCapacity
+#   autoscaling_iam_role_arn = data.terraform_remote_state.main-cluster.outputs.AutoscalingEcsRole
+#   route53_fqdn             = module.route53-internal.FancyLoadBalancerDNSName
+#   health_path              = "/"
+#   app_autoscaling_enabled  = false
+#   container_port           = 80
+# }
 

@@ -1,0 +1,39 @@
+[
+    {
+      "portMappings": [
+        {
+          "hostPort": 0,
+          "protocol": "tcp",
+          "containerPort": 80
+        }
+      ],
+      "cpu": 256,
+      "environment": [
+        {
+          "name": "ENV",
+          "value": "${app_env}"
+        },
+        {
+          "name": "AWS_DEFAULT_REGION",
+          "value": "us-east-1"
+        }
+      ],
+      "secrets": [
+      {
+         "valueFrom": "test.db.password",
+         "name": "DB_PASSWORD"
+      }
+      ],
+      "memory": 256,
+      "memoryReservation": 128,
+      "image": "${docker_image}",
+      "essential": true,
+      "logConfiguration": {
+      "logDriver": "fluentd",
+        "options": {
+          "tag": "nginx.${service_name}.{{.ID}}"
+        }
+      },
+      "name": "${service_name}"
+    }
+]
